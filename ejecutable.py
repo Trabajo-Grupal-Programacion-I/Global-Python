@@ -39,3 +39,14 @@ while True:
         print("Error: Debes ingresar A, B o C.")
         
 print("Acción elegida:", accion_a_realizar)
+
+match accion_a_realizar:
+    case "A":
+        #Detectar Mutaciones
+        return ""
+    case "B":
+        #Mutacion
+        return ""
+    case "C":
+        #Sanarlo
+        return ""         
