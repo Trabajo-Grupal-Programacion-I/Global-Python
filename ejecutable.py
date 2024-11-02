@@ -1,6 +1,7 @@
 #Código que pida al usuario que ingrese un ADN y pregunte si desea detectar mutaciones, mutarlo o sanarlo. Dependiendo de la respuesta, se deben instanciar 
 #las clases necesarias y devolver el ADN final junto con algún mensaje informando al respecto del computo realizado.
-import clase_mutador
+import clase_mutador, clase_sanador
+
 print("""¡Bienvenido! Te voy a pedir que ingreses una secuencia de ADN con las inciales de las 4 bases nitrogrenadas, tiene que ser 6 secuecias de 6 iniciales 
 separando cada secuencia con una coma(,).""")
 
@@ -24,7 +25,8 @@ while True:
 # Confirmamos que el ADN ingresado es correcto
 print("ADN ingresado correctamente:", lista_adn_usuario)
 
-while True:
+#Bucle para seleccionar que hacer con el ADN
+while True: 
     accion_a_realizar = input("""¿Que deseas hacer con el ADN ingresado?
     -------------------------------------------------
         A-DETECTAR MUTACIONES
@@ -33,6 +35,7 @@ while True:
     -------------------------------------------------    
         ---> """).upper()
 
+    #Condicion de salida del bucle while
     if accion_a_realizar in ["A", "B", "C"]:
         break
     else:
@@ -40,13 +43,16 @@ while True:
         
 print("Acción elegida:", accion_a_realizar)
 
+
 match accion_a_realizar:
     case "A":
         #Detectar Mutaciones
-        return ""
+        accion_a_realizar
     case "B":
         mutante = clase_mutador.Mutador(clase_mutador.base_nitrogenada, clase_mutador.nivel_mutacion, clase_mutador.origen_mutacion)
         mutante.muestra_datos()
     case "C":
-        #Sanarlo
-        return ""         
+        #Envia el ADN a la clase Sanador para corregir el ADN
+        sanador = clase_sanador.Sanador() #Instanciando la clase
+        sanador.sanar_mutantes(lista_adn_usuario) #Enviando ADN para su analisis  
+        
