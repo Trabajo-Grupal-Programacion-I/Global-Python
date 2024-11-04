@@ -5,7 +5,8 @@ class  Detector:
     def detectar_mutantes(self, lista_adn_usuario):
         #comprobar horizontal, vertival, diagonal
         return(self.detectar_horizontal(lista_adn_usuario)or self.detectar_vertical(lista_adn_usuario)or self.detectar_diagonal(lista_adn_usuario))
-    
+
+
     def contar_repeticiones(self, lista_adn_usuario):
         #cuenta cuantas veces se repite una base nitrogenada
         max_repeticiones = 1
@@ -58,9 +59,6 @@ class  Detector:
                 return True
             else:
                 return False
-
-
-            
 
 
                         
