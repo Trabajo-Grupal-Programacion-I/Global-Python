@@ -1,5 +1,5 @@
 class  Detector: 
-    def __init__(self, lista_adn_usuario, longitud_mutacion=4):
+    def __init__(self, lista_adn_usuario, longitud_mutacion >= 4):
         self.lista_adn_usuario = lista_adn_usuario
         self.longitud_mutacion = longitud_mutacion
 
