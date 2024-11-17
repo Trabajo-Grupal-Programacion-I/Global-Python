@@ -50,9 +50,16 @@ match accion_a_realizar:
         detector = clases.Detector(lista_adn_usuario)
         detector.detectar_mutantes(lista_adn_usuario)
     case "B":
-        mutacion = input("Quieres crear una radiacion o un virus?")
-        radiacion = clases.Radiacion()
-        radiacion.crear_mutante(lista_adn_usuario)
+        mutacion = input("¿Quieres crear una radiacion(A) o un virus(B)?").upper
+        if mutacion == "A":
+            radiacion = clases.Radiacion()
+            radiacion.crear_mutante(lista_adn_usuario)
+        elif mutacion == "B":
+            virus = clases.Virus()
+            virus.crear_virus(lista_adn_usuario)
+        else:
+            print("Opción incorrecta")
+        
     case "C":
         #Envia el ADN a la clase Sanador para corregir el ADN
         sanador = clases.Sanador() #Instanciando la clase

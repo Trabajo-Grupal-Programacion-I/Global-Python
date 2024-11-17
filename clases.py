@@ -15,6 +15,38 @@ class Mutador:
         print(f"La base nitrogenada a repetirse será: {self.base_nitrogenada}")
         print(f"El nivel de mutación será: {self.nivel_mutacion}")
         print(f"El origen de la mutación será: {self.origen}")
+
+
+
+class Virus(Mutador):
+    def __init__(self, base_nitrogenada=None, nivel_mutacion=None, origen=None):
+
+        super().__init__(base_nitrogenada, nivel_mutacion, origen)
+
+    def crear_virus(self, lista_adn_usuario):
+
+        try:
+
+            matriz_adn = [list(fila) for fila in lista_adn_usuario]
+
+            for i in range(4): 
+                for j in range(4 - i):
+                    if i + j < len(matriz_adn) and j < len(matriz_adn[i + j]):
+                        matriz_adn[i + j][j] = "A"
+                    else:
+                        raise IndexError(f"Se exceden los límites de la matriz al intentar acceder a ({i+j}, {j})")
+            for fila in matriz_adn:
+                print(' '.join(fila))
+
+            return matriz_adn
+
+        except Exception as e:
+            print(f"Error al crear el mutante: {e}")
+            return None
+        
+       
+            
+
     
     
 class Radiacion(Mutador):
@@ -71,8 +103,12 @@ class  Detector:
 
     def detectar_mutantes(self, lista_adn_usuario):
         #comprobar horizontal, vertival, diagonal
-        return(self.detectar_horizontal(lista_adn_usuario)or self.detectar_vertical(lista_adn_usuario)or self.detectar_diagonal(lista_adn_usuario))
-
+        horizontal = self.detectar_horizontal(lista_adn_usuario)
+        vertical = self.detectar_vertical(lista_adn_usuario)
+        diagonal = self.detectar_diagonal(lista_adn_usuario)
+        
+        #paso los resultados de las funciones
+        self.tipo_mutacion(horizontal, vertical, diagonal)
 
     def contar_repeticiones(self, lista_adn_usuario):
         #cuenta cuantas veces se repite una base nitrogenada
@@ -93,7 +129,6 @@ class  Detector:
         #revisar cada fila de la matriz
         for fila in self.lista_adn_usuario:
             if self.contar_repeticiones(fila) >= 4:
-                print("Se encontro una mutacion en horizantal")
                 return True
             else:
                 return False
@@ -103,17 +138,15 @@ class  Detector:
         for col in range(6):
             columna = ''.join(fila[col] for fila in self.lista_adn_usuario)
             if self.contar_repeticiones(columna) >= 4:
-                print("Se encontro una mutacion en vertical")
                 return True
         return False
     
-    def detectar_diagonal(self, lista_dn_usuario):
+    def detectar_diagonal(self, lista_adn_usuario):
         #comrpobar diagonal de izquierda a derecha y derecha a izquierda
         #comprobar de izquierda a derecha
         for i in range(3):
             diagonal = ''.join(self.lista_adn_usuario[i + j][j] for j in range(6 - i))
             if self.contar_repeticiones(diagonal) >= 4:
-                print("Se encontro una mutacion en diagonal")
                 return True
             else:
                 return False
@@ -122,13 +155,24 @@ class  Detector:
         for i in range (1, 6):
             diagonal = ''.join(self.lista_adn_usuario[j][i + j] for j in range (6 - i))
             if self.contar_repeticiones(diagonal) >= 4:
-                print("Se encontro una mutacion en diagonal")
                 return True
             else:
                 return False
             
+    def tipo_mutacion(self, detectar_horizontal, detectar_vertical, detectar_diagonal):
+        if detectar_horizontal:
+            print("Se detecto una mutacion horizontal.")
+        elif detectar_vertical:
+            print("Se detecto una mutacion vertical.")
+        elif detectar_diagonal:
+            print("Se detecto una mutacion diagonal.")
+        elif detectar_diagonal and detectar_horizontal and detectar_vertical:
+            print("Se detectaron mutaciones horizontales, verticales y diagonales.")
+        else:
+            print("No se detecto ninguna mutacion.")
             
-            #Por lo menos 2 atributos que consideren pertinentes.
+            
+#Por lo menos 2 atributos que consideren pertinentes.
 #Método constructor (init) con sus argumentos para definir los atributos al instanciar un objeto.
 #Método sanar_mutantes, encargado de sanar cualquier tipo de mutación. Éste debe tener como argumento la matriz de ADN, revisar si existen mutaciones 
 #y, si las hay, generar aleatoriamente un ADN completamente nuevo que no tenga mutaciones y retornarlo. Consejo: esta clase va a necesitar el 
