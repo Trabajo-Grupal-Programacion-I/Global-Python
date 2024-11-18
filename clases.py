@@ -23,25 +23,22 @@ class Virus(Mutador):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
     def crear_virus(self, lista_adn_usuario):
-        detector = Detector(lista_adn_usuario)
-        #metodo detectar
-        comprobacion = detector.detectar_mutantes(lista_adn_usuario)
+        
         try:
-            if comprobacion == True :
-                # Convertimos la lista de strings en una lista de listas para modificar la matriz
-                matriz_adn = [list(fila) for fila in lista_adn_usuario]
+            
+            # Convertimos la lista de strings en una lista de listas para modificar la matriz
+            matriz_adn = [list(fila) for fila in lista_adn_usuario]
 
-                # Modificamos solo la diagonal principal
-                for i in range(0,4):
-                    matriz_adn[i][i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
+            # Modificamos solo la diagonal principal
+            for i in range(0,4):
+                matriz_adn[i][i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
 
-                # Imprimimos la matriz resultante
-                for fila in matriz_adn:
-                    print(' '.join(fila))
+            # Imprimimos la matriz resultante
+            for fila in matriz_adn:
+                print(' '.join(fila))
 
-                return matriz_adn
-            else: 
-                return lista_adn_usuario
+            return matriz_adn
+            
 
         except Exception as e:
             print(f"Error al crear el mutante: {e}")
@@ -224,7 +221,7 @@ class Sanador:
             while True:
             # Generar un nuevo ADN aleatorio
                 letras = ["A", "C", "G", "T"]
-                nuevo_adn = [''.join(random.choice(letras) for _ in range(6)) for _ in range(6)]
+                nuevo_adn = [''.join(random.choice(letras) for i in range(6)) for i in range(6)]
 
             # Verificar si el nuevo ADN generado no tiene mutaciones
                 if not detector.detectar_mutantes(nuevo_adn):
