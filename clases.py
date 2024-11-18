@@ -20,35 +20,37 @@ class Mutador:
 
 class Virus(Mutador):
     def __init__(self, base_nitrogenada=None, nivel_mutacion=None, origen=None):
-
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
     def crear_virus(self, lista_adn_usuario):
-
+        detector = Detector(lista_adn_usuario)
+        #metodo detectar
+        comprobacion = detector.detectar_mutantes(lista_adn_usuario)
         try:
+            if comprobacion == True :
+                # Convertimos la lista de strings en una lista de listas para modificar la matriz
+                matriz_adn = [list(fila) for fila in lista_adn_usuario]
 
-            matriz_adn = [list(fila) for fila in lista_adn_usuario]
+                # Modificamos solo la diagonal principal
+                for i in range(0,4):
+                    matriz_adn[i][i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
 
-            for i in range(4): 
-                for j in range(4 - i):
-                    if i + j < len(matriz_adn) and j < len(matriz_adn[i + j]):
-                        matriz_adn[i + j][j] = "A"
-                    else:
-                        raise IndexError(f"Se exceden los límites de la matriz al intentar acceder a ({i+j}, {j})")
-            for fila in matriz_adn:
-                print(' '.join(fila))
+                # Imprimimos la matriz resultante
+                for fila in matriz_adn:
+                    print(' '.join(fila))
 
-            return matriz_adn
+                return matriz_adn
+            else: 
+                return lista_adn_usuario
 
         except Exception as e:
             print(f"Error al crear el mutante: {e}")
             return None
-        
-       
-            
 
-    
-    
+        
+
+
+        
 class Radiacion(Mutador):
     def __init__(self, base_nitrogenada = None, nivel_mutacion = None, origen = None, tipo_radiacion = None):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
@@ -207,27 +209,36 @@ class Sanador:
             print("El sanador ya esta en estado inactivo")
 
                     
-    def sanar_mutantes(self, adn):  #Analizamos el ADN
+    def sanar_mutantes(self, lista_adn_usuario):  #Analizamos el ADN
+        detector = Detector(lista_adn_usuario)
         #metodo detectar
-        if ():  
-            print("El ADN administrado no posee mutacion") 
+        comprobacion = detector.detectar_mutantes(lista_adn_usuario)
+        if (comprobacion == False):
+            for fila in lista_adn_usuario:
+                print(' '.join(fila))  
+                
+            print("El ADN administrado no posee mutacion")
+            
         else:
             self.cambiar_estado()  #Estado activo del sanador  
-            self.adn_aleatorio(adn)  #Cambiamos el ADN mutado por uno sano
-        return
+            while True:
+            # Generar un nuevo ADN aleatorio
+                letras = ["A", "C", "G", "T"]
+                nuevo_adn = [''.join(random.choice(letras) for _ in range(6)) for _ in range(6)]
+
+            # Verificar si el nuevo ADN generado no tiene mutaciones
+                if not detector.detectar_mutantes(nuevo_adn):
+                    lista_adn_usuario[:] = nuevo_adn  # Reemplazamos el ADN original por el nuevo
+                    break  # Salimos del bucle si el ADN generado es válido
+        
+            # Imprimimos el ADN sano y finalizamos la sanación
+            print("ADN sano generado:")
+            for fila in lista_adn_usuario:
+                print(' '.join(fila))
+            self.cambio_energia()
+            self.sanador_inactivo()
+            
+        
 
     
-    def adn_aleatorio(self,adn):  #Creacion del ADN nuevo
-        adn.clear()
-        letras = ["A", "C", "G", "T"]
-        
-        for i in range(6):  
-            secuencia = ''.join(random.choice(letras) for i in range(6))
-            adn.append(secuencia)
-        print(adn)
-        self.cambio_energia()
-        self.sanador_inactivo()
-        
-        
-        
-        #falta metodo detectar y bucle, luego dejar inactivo el sanador y mostrar la energia restante
+    

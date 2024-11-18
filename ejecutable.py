@@ -50,7 +50,7 @@ match accion_a_realizar:
         detector = clases.Detector(lista_adn_usuario)
         detector.detectar_mutantes(lista_adn_usuario)
     case "B":
-        mutacion = input("¿Quieres crear una radiacion(A) o un virus(B)?").upper
+        mutacion = input("¿Quieres crear una radiacion(A) o un virus(B)?").upper()
         if mutacion == "A":
             radiacion = clases.Radiacion()
             radiacion.crear_mutante(lista_adn_usuario)
