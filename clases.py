@@ -102,12 +102,14 @@ class  Detector:
 
     def detectar_mutantes(self, lista_adn_usuario):
         #comprobar horizontal, vertival, diagonal
-        horizontal = self.detectar_horizontal(lista_adn_usuario)
-        vertical = self.detectar_vertical(lista_adn_usuario)
-        diagonal = self.detectar_diagonal(lista_adn_usuario)
-        
+        mutaciones_detectadas = {
+            "horizontal": self.detectar_horizontal(lista_adn_usuario),
+            "vertical":self.detectar_vertical(lista_adn_usuario),
+            "diagonal":self.detectar_diagonal(lista_adn_usuario),  
+        }
+
         #paso los resultados de las funciones
-        self.tipo_mutacion(horizontal, vertical, diagonal)
+        self.tipo_mutacion(mutaciones_detectadas)
 
     def contar_repeticiones(self, lista_adn_usuario):
         #cuenta cuantas veces se repite una base nitrogenada
@@ -158,17 +160,13 @@ class  Detector:
             else:
                 return False
             
-    def tipo_mutacion(self, detectar_horizontal, detectar_vertical, detectar_diagonal):
-        if detectar_horizontal:
-            print("Se detecto una mutacion horizontal.")
-        elif detectar_vertical:
-            print("Se detecto una mutacion vertical.")
-        elif detectar_diagonal:
-            print("Se detecto una mutacion diagonal.")
-        elif detectar_diagonal and detectar_horizontal and detectar_vertical:
-            print("Se detectaron mutaciones horizontales, verticales y diagonales.")
+    def tipo_mutacion(self, mutaciones_detectadas):
+        #identificar y mostrar los tipos
+        tipos_detectados = [tipo for tipo, detectado in mutaciones_detectadas.items() if detectado]
+        if not tipos_detectados:
+            print ("No se detecto ninguna mutacion.")
         else:
-            print("No se detecto ninguna mutacion.")
+            print (f"Se detectaron las siguientes mutaciones: {', '.join(tipos_detectados)}.")      
             
             
 #Por lo menos 2 atributos que consideren pertinentes.
