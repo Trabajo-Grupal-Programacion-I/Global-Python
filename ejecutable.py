@@ -58,9 +58,28 @@ while True:
             if mutacion == "A":
                 radiacion = clases.Radiacion()
                 radiacion.crear_mutante(lista_adn_usuario)
+
             elif mutacion == "B":
                 virus = clases.Virus()
-                virus.crear_mutante(lista_adn_usuario)
+                
+
+                posicion_inicial = input("""¿Que deseas hacer con el ADN ingresado?
+                    -------------------------------------------------
+                        A-MODIFICAR DE IZQUIERDA A DERECHA
+                        B-MODIFICAR DE DERECHA A IZQUIERDA
+                    -------------------------------------------------    
+                            ---> """).upper()
+
+                while True:
+                    base_nitrogenada = input("""¿Por cual base nitrogenada desea modificar? ['A', 'C', 'T', 'G']
+                                    ---> """).upper()
+                    if base_nitrogenada in ["A", "C", "T", "G"]:
+                        break
+                    else:
+                        print("Error: Debes ingresar A, C, T, G.")
+
+                virus.crear_mutante(lista_adn_usuario, base_nitrogenada, posicion_inicial)
+
             else:
                 print("Opción incorrecta")
             
