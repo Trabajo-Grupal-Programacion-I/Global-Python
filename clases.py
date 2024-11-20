@@ -123,7 +123,7 @@ class Radiacion(Mutador):
 
 
 class  Detector: 
-    def __init__(self, lista_adn_usuario, contador_mutaciones = 0):
+    def __init__(self, lista_adn_usuario, contador_mutaciones=0):
         self.lista_adn_usuario = [list(elemento) for elemento in lista_adn_usuario]
         self.contador_mutaciones = contador_mutaciones
 
@@ -131,10 +131,11 @@ class  Detector:
         #comprobar horizontal, vertival, diagonal
         mutaciones_detectadas = {
             "horizontal": self.detectar_horizontal(lista_adn_usuario),
-            "vertical":self.detectar_vertical(lista_adn_usuario),
-            "diagonal izquierda":self.detectar_diagonal_izquierda(lista_adn_usuario),
-            "diagonal derecha" : self.detectar_diagonal_derecha(lista_adn_usuario)  
+            "vertical": self.detectar_vertical(lista_adn_usuario),
+            "diagonal izquierda": self.detectar_diagonal_izquierda(lista_adn_usuario),
+            "diagonal derecha": self.detectar_diagonal_derecha(lista_adn_usuario)
         }
+        
         print(f"Se encontraron esta cantidad de mutaciones: {self.contador_mutaciones}")
         #paso los resultados de las funciones
         self.tipo_mutacion(mutaciones_detectadas)
