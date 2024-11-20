@@ -215,23 +215,44 @@ class Sanador:
             print("El ADN administrado no posee mutacion")
             
         else:
-            self.cambiar_estado()  #Estado activo del sanador  
-            while True:
-            # Generar un nuevo ADN aleatorio
-                letras = ["A", "C", "G", "T"]
-                nuevo_adn = [''.join(random.choice(letras) for i in range(6)) for i in range(6)]
+            self.cambiar_estado()  # Estado activo del sanador
 
-            # Verificar si el nuevo ADN generado no tiene mutaciones
-                if not detector.detectar_mutantes(nuevo_adn):
-                    lista_adn_usuario[:] = nuevo_adn  # Reemplazamos el ADN original por el nuevo
-                    break  # Salimos del bucle si el ADN generado es válido
-        
-            # Imprimimos el ADN sano y finalizamos la sanación
-            print("ADN sano generado:")
-            for fila in lista_adn_usuario:
-                print(' '.join(fila))
-            self.cambio_energia()
-            self.sanador_inactivo()
+        while True:
+            # Generar un nuevo ADN aleatorio SIN mutaciones
+            letras = ["A", "C", "G", "T"]
+            nuevo_adn = []
+            valido = True  # Bandera para comprobar si el ADN generado es válido
+
+            for i in range(6):
+                fila = []
+                for j in range(6):
+                    letra = random.choice(letras)
+                    # Comprobaciones al insertar la letra
+                    if (
+                        j >= 3 and fila[j-1] == fila[j-2] == fila[j-3] == letra or  # Mutación horizontal
+                        i >= 3 and nuevo_adn[i-1][j] == nuevo_adn[i-2][j] == nuevo_adn[i-3][j] == letra or  # Mutación vertical
+                        i >= 3 and j >= 3 and nuevo_adn[i-1][j-1] == nuevo_adn[i-2][j-2] == nuevo_adn[i-3][j-3] == letra or  # Diagonal principal
+                        i >= 3 and j <= 2 and nuevo_adn[i-1][j+1] == nuevo_adn[i-2][j+2] == nuevo_adn[i-3][j+3] == letra  # Diagonal secundaria
+                    ):
+                        valido = False  # Marcamos que no es válido y salimos del bucle
+                        break
+                    fila.append(letra)
+
+                if not valido:
+                    break
+
+                nuevo_adn.append(''.join(fila))
+
+            if valido:  # Si el ADN generado no tiene mutaciones, salimos del bucle
+                lista_adn_usuario[:] = nuevo_adn
+                break
+
+        # Imprimimos el ADN sano y finalizamos la sanación
+        print("ADN sano generado:")
+        for fila in lista_adn_usuario:
+            print(' '.join(fila))
+        self.cambio_energia()
+        self.sanador_inactivo()
             
         
 
