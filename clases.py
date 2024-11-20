@@ -19,19 +19,45 @@ class Mutador:
 
 
 class Virus(Mutador):
-    def __init__(self, base_nitrogenada=None, nivel_mutacion=None, origen=None):
+    def __init__(self, base_nitrogenada = None, nivel_mutacion=None, origen=None):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
     def crear_virus(self, lista_adn_usuario):
         
+        while True:
+
+            self.base_nitrogenada = input("""¿Por cual base nitrogenada desea modificar? ['A', 'C', 'T', 'G']
+                            ---> """).upper()
+
+            if self.base_nitrogenada in ["A", "C", "T", "G"]:
+                break
+            else:
+                print("Error: Debes ingresar A, C, T, G.")
+
         try:
             
             # Convertimos la lista de strings en una lista de listas para modificar la matriz
             matriz_adn = [list(fila) for fila in lista_adn_usuario]
 
-            # Modificamos solo la diagonal principal
-            for i in range(0,4):
-                matriz_adn[i][i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
+            posicion_inicial = input("""¿Que deseas hacer con el ADN ingresado?
+                    -------------------------------------------------
+                        A-SUPERIOR IZQUIERDA
+                        B-SUPERIOR DERECHA
+                    -------------------------------------------------    
+                            ---> """).upper()
+
+            match posicion_inicial:
+
+                case "A":         
+                    # Modificamos solo la diagonal superior izquierda
+                    for i in range(0,4):
+                        matriz_adn[i][i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
+
+                case "B":
+                    # Modificamos solo la diagonal superior derecha
+                    for i in range(0,4):
+                        matriz_adn[i][5 - i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
+
 
             # Imprimimos la matriz resultante
             for fila in matriz_adn:
