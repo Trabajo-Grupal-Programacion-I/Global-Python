@@ -127,18 +127,20 @@ class Radiacion(Mutador):
 
 
 class  Detector: 
-    def __init__(self, lista_adn_usuario):
+    def __init__(self, lista_adn_usuario, contador_mutaciones=0):
         self.lista_adn_usuario = [list(elemento) for elemento in lista_adn_usuario]
+        self.contador_mutaciones = contador_mutaciones
 
     def detectar_mutantes(self, lista_adn_usuario):
         #comprobar horizontal, vertival, diagonal
         mutaciones_detectadas = {
             "horizontal": self.detectar_horizontal(lista_adn_usuario),
-            "vertical":self.detectar_vertical(lista_adn_usuario),
-            "diagonal izquierda":self.detectar_diagonal_izquierda(lista_adn_usuario),
-            "diagonal derecha" : self.detectar_diagonal_derecha(lista_adn_usuario)  
+            "vertical": self.detectar_vertical(lista_adn_usuario),
+            "diagonal izquierda": self.detectar_diagonal_izquierda(lista_adn_usuario),
+            "diagonal derecha": self.detectar_diagonal_derecha(lista_adn_usuario)
         }
-
+        
+        print(f"Se encontraron esta cantidad de mutaciones: {self.contador_mutaciones}")
         #paso los resultados de las funciones
         self.tipo_mutacion(mutaciones_detectadas)
 
@@ -161,6 +163,7 @@ class  Detector:
         #revisar cada fila de la matriz
         for fila in self.lista_adn_usuario:
             if self.contar_repeticiones(fila) >= 4:
+                self.contador_mutaciones += 1
                 return True
             else:
                 return False
@@ -170,6 +173,7 @@ class  Detector:
         for col in range(6):
             columna = ''.join(fila[col] for fila in self.lista_adn_usuario)
             if self.contar_repeticiones(columna) >= 4:
+                self.contador_mutaciones += 1
                 return True
         return False
     
@@ -180,6 +184,7 @@ class  Detector:
             diagonal = ''.join(lista_adn_usuario[i + j][j] for j in range(6 - i))
             
             if self.contar_repeticiones(diagonal) >= 4:
+                self.contador_mutaciones += 1
                 return True
 
     
@@ -193,6 +198,7 @@ class  Detector:
             diagonal = ''.join(lista_adn_usuario[j][5 - (i + j)] for j in range(6 - i))
             
             if self.contar_repeticiones(diagonal) >= 4:
+                self.contador_mutaciones += 1
                 return True
 
     
