@@ -22,42 +22,41 @@ class Virus(Mutador):
     def __init__(self, base_nitrogenada = None, nivel_mutacion=None, origen=None):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
-    def crear_mutante(self, lista_adn_usuario, base_nitrogenada, posicion_inicial):
-             
+    def crear_virus(self, lista_adn_usuario):
+        
+        while True:
+
+            self.base_nitrogenada = input("""¿Por cual base nitrogenada desea modificar? ['A', 'C', 'T', 'G']
+                            ---> """).upper()
+
+            if self.base_nitrogenada in ["A", "C", "T", "G"]:
+                break
+            else:
+                print("Error: Debes ingresar A, C, T, G.")
+
         try:
             
             # Convertimos la lista de strings en una lista de listas para modificar la matriz
             matriz_adn = [list(fila) for fila in lista_adn_usuario]
 
-            while True:
-
-                x = int(input("Ingrese la posición de la fila\n ---> "))
-
-                if x >= 0 and x <= 5:
-                    break
-                else:
-                    print("Error: Debes ingresar una posición del 0 al 5")
-
-            while True:
-
-                y = int(input("Ingrese la posición de la columna\n ---> "))
-
-                if y >= 0 and y <= 5:
-                    break
-                else:
-                    print("Error: Debes ingresar una posición del 0 al 5")
+            posicion_inicial = input("""¿Que deseas hacer con el ADN ingresado?
+                    -------------------------------------------------
+                        A-SUPERIOR IZQUIERDA
+                        B-SUPERIOR DERECHA
+                    -------------------------------------------------    
+                            ---> """).upper()
 
             match posicion_inicial:
-                
+
                 case "A":         
                     # Modificamos solo la diagonal superior izquierda
                     for i in range(0,4):
-                        matriz_adn[i + x][i + y] = base_nitrogenada  # Cambiamos la base en la diagonal
+                        matriz_adn[i][i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
 
                 case "B":
                     # Modificamos solo la diagonal superior derecha
                     for i in range(0,4):
-                        matriz_adn[i + x][y - i] = base_nitrogenada  # Cambiamos la base en la diagonal
+                        matriz_adn[i][5 - i] = self.base_nitrogenada  # Cambiamos la base en la diagonal
 
 
             # Imprimimos la matriz resultante
@@ -77,31 +76,31 @@ class Virus(Mutador):
         
 class Radiacion(Mutador):
     def __init__(self, base_nitrogenada=None, nivel_mutacion=None, origen=None):
+        # Llamamos al constructor de la clase base (Mutador) con los parámetros correspondientes
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
-
-    def crear_mutante(self, lista_adn_usuario):
+    def crear_mutante(self, lista_adn_usuario, posicion_inicial, orientacion_de_la_mutacion, base_nitrogenada):
+        """
+        Realiza una mutación en el ADN dado, según la posición inicial, la orientación y la base nitrogenada.
+        """
+        # Convertir las secuencias de ADN en una matriz de listas
         matriz = [list(elemento) for elemento in lista_adn_usuario]
         tamaño_matriz = len(matriz)
-        try:
-            # Solicitar posición inicial al usuario
-            posicion_inicial = input("Ingrese la posición inicial (fila,columna)separada por coma,teniendo en cuenta que comienza desde la posicion 0 hasta el 5: ")
-            posicion_inicial = tuple(map(int, posicion_inicial.split(',')))
 
-            # Validar posición inicial
-            if not (0 <= posicion_inicial[0] <tamaño_matriz) or not (0 <= posicion_inicial[1] < tamaño_matriz):
+        try:
+            # Validar la posición inicial
+            if not (0 <= posicion_inicial[0] < tamaño_matriz) or not (0 <= posicion_inicial[1] < tamaño_matriz):
                 raise IndexError("La posición inicial está fuera de los límites de la matriz.")
 
-            # Solicitar orientación al usuario
-            orientacion_de_la_mutacion = input("Ingrese la orientación de la mutación ('H' para horizontal, 'V' para vertical): ").upper()
+            # Validar la orientación de la mutación
             if orientacion_de_la_mutacion not in ['H', 'V']:
                 raise ValueError("La orientación debe ser 'H' (horizontal) o 'V' (vertical).")
 
-            # Solicitar base nitrogenada al usuario
-            base_nitrogenada = input("Ingrese la base nitrogenada para la mutación (A, T, C, G): ").upper()
+            # Validar la base nitrogenada
             if base_nitrogenada not in ['A', 'T', 'C', 'G']:
-                raise ValueError("La base nitrogenada debe ser una de las siguientes: A, T, C, G.")
+                raise ValueError("La base nitrogenada debe ser A, T, C o G.")
 
+            # Realizar la mutación según la orientación
             if orientacion_de_la_mutacion == 'H':
                 # Comprobar límites para la mutación horizontal
                 if posicion_inicial[1] + 4 > tamaño_matriz:
@@ -128,8 +127,9 @@ class Radiacion(Mutador):
 
 
 class  Detector: 
-    def __init__(self, lista_adn_usuario):
+    def __init__(self, lista_adn_usuario, contador_mutaciones = 0):
         self.lista_adn_usuario = [list(elemento) for elemento in lista_adn_usuario]
+        self.contador_mutaciones = contador_mutaciones
 
     def detectar_mutantes(self, lista_adn_usuario):
         #comprobar horizontal, vertival, diagonal
@@ -139,7 +139,7 @@ class  Detector:
             "diagonal izquierda":self.detectar_diagonal_izquierda(lista_adn_usuario),
             "diagonal derecha" : self.detectar_diagonal_derecha(lista_adn_usuario)  
         }
-
+        print(f"Se encontraron esta cantidad de mutaciones: {self.contador_mutaciones}")
         #paso los resultados de las funciones
         self.tipo_mutacion(mutaciones_detectadas)
 
@@ -162,6 +162,7 @@ class  Detector:
         #revisar cada fila de la matriz
         for fila in self.lista_adn_usuario:
             if self.contar_repeticiones(fila) >= 4:
+                self.contador_mutaciones += 1
                 return True
             else:
                 return False
@@ -171,6 +172,7 @@ class  Detector:
         for col in range(6):
             columna = ''.join(fila[col] for fila in self.lista_adn_usuario)
             if self.contar_repeticiones(columna) >= 4:
+                self.contador_mutaciones += 1
                 return True
         return False
     
@@ -181,6 +183,7 @@ class  Detector:
             diagonal = ''.join(lista_adn_usuario[i + j][j] for j in range(6 - i))
             
             if self.contar_repeticiones(diagonal) >= 4:
+                self.contador_mutaciones += 1
                 return True
 
     
@@ -194,6 +197,7 @@ class  Detector:
             diagonal = ''.join(lista_adn_usuario[j][5 - (i + j)] for j in range(6 - i))
             
             if self.contar_repeticiones(diagonal) >= 4:
+                self.contador_mutaciones += 1
                 return True
 
     
