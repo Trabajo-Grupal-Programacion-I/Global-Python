@@ -24,7 +24,9 @@ while True:
             print("Error: La secuencia de ADN debe tener exactamente 6 secuencias de 6 letras cada una, separadas por comas.")
 
     # Confirmamos que el ADN ingresado es correcto
-    print("ADN ingresado correctamente:", lista_adn_usuario)
+    print("ADN ingresado correctamente")
+    for fila in lista_adn_usuario:
+            print(' '.join(fila))
 
     #Bucle para seleccionar que hacer con el ADN
     while True: 

@@ -75,48 +75,52 @@ class Virus(Mutador):
 
         
 class Radiacion(Mutador):
-    def __init__(self, base_nitrogenada = None, nivel_mutacion = None, origen = None, tipo_radiacion = None):
+    def __init__(self, base_nitrogenada=None, nivel_mutacion=None, origen=None):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
-        self.tipo_radiacion = tipo_radiacion or random.choice(["UV", "Ionizante", "Radón"]) 
-        self.tamaño_matriz = 6
-        self.matriz = [['-' for _ in range(self.tamaño_matriz)] for _ in range(self.tamaño_matriz)]  # Crear matriz vacía
-        
-        
-    #tipo_radiacion = tipo_radiacion or random.choice(["UV", "Ionizante", "Radón"]) 
-    
-    def crear_mutante(self, lista_adn_usuario):
-        posicion_inicial = (2, 2)  # Ejemplo de posición inicial
-        orientacion_de_la_mutacion = random.choice(['H', 'V'])
-        base_nitrogenada = self.base_nitrogenada  # Usamos el atributo de la clase
-        self.matriz = [list(elemento) for elemento in lista_adn_usuario]
 
+
+    def crear_mutante(self, lista_adn_usuario):
+        matriz = [list(elemento) for elemento in lista_adn_usuario]
+        tamaño_matriz = len(matriz)
         try:
-            # Comprobaciones previas
-            if orientacion_de_la_mutacion not in ['H', 'V']:
-                raise ValueError("La orientación debe ser 'H' (horizontal) o 'V' (vertical).")
-            if not (0 <= posicion_inicial[0] < self.tamaño_matriz) or not (0 <= posicion_inicial[1] < self.tamaño_matriz):
+            # Solicitar posición inicial al usuario
+            posicion_inicial = input("Ingrese la posición inicial (fila,columna)separada por coma,teniendo en cuenta que comienza desde la posicion 0 hasta el 5: ")
+            posicion_inicial = tuple(map(int, posicion_inicial.split(',')))
+
+            # Validar posición inicial
+            if not (0 <= posicion_inicial[0] <tamaño_matriz) or not (0 <= posicion_inicial[1] < tamaño_matriz):
                 raise IndexError("La posición inicial está fuera de los límites de la matriz.")
 
-            # Realiza la mutación en la matriz
+            # Solicitar orientación al usuario
+            orientacion_de_la_mutacion = input("Ingrese la orientación de la mutación ('H' para horizontal, 'V' para vertical): ").upper()
+            if orientacion_de_la_mutacion not in ['H', 'V']:
+                raise ValueError("La orientación debe ser 'H' (horizontal) o 'V' (vertical).")
+
+            # Solicitar base nitrogenada al usuario
+            base_nitrogenada = input("Ingrese la base nitrogenada para la mutación (A, T, C, G): ").upper()
+            if base_nitrogenada not in ['A', 'T', 'C', 'G']:
+                raise ValueError("La base nitrogenada debe ser una de las siguientes: A, T, C, G.")
+
             if orientacion_de_la_mutacion == 'H':
                 # Comprobar límites para la mutación horizontal
-                if posicion_inicial[1] + 4 > self.tamaño_matriz:
+                if posicion_inicial[1] + 4 > tamaño_matriz:
                     raise IndexError("No hay suficiente espacio horizontal para la mutación.")
                 for i in range(4):
-                    self.matriz[posicion_inicial[0]][posicion_inicial[1] + i] = base_nitrogenada
+                    matriz[posicion_inicial[0]][posicion_inicial[1] + i] = base_nitrogenada
 
             elif orientacion_de_la_mutacion == 'V':
                 # Comprobar límites para la mutación vertical
-                if posicion_inicial[0] + 4 > self.tamaño_matriz:
+                if posicion_inicial[0] + 4 > tamaño_matriz:
                     raise IndexError("No hay suficiente espacio vertical para la mutación.")
                 for i in range(4):
-                    self.matriz[posicion_inicial[0] + i][posicion_inicial[1]] = base_nitrogenada
+                    matriz[posicion_inicial[0] + i][posicion_inicial[1]] = base_nitrogenada
 
             # Mostrar la matriz resultante
-            for fila in self.matriz:
+            print("\nMatriz resultante con la mutación:")
+            for fila in matriz:
                 print(' '.join(fila))
 
-            return self.matriz  # Devolver la matriz con las modificaciones
+            return matriz  # Devolver la matriz con las modificaciones
 
         except Exception as e:
             print(f"Error al crear mutante: {e}")
@@ -131,7 +135,8 @@ class  Detector:
         mutaciones_detectadas = {
             "horizontal": self.detectar_horizontal(lista_adn_usuario),
             "vertical":self.detectar_vertical(lista_adn_usuario),
-            "diagonal":self.detectar_diagonal(lista_adn_usuario),  
+            "diagonal izquierda":self.detectar_diagonal_izquierda(lista_adn_usuario),
+            "diagonal derecha" : self.detectar_diagonal_derecha(lista_adn_usuario)  
         }
 
         #paso los resultados de las funciones
@@ -168,23 +173,31 @@ class  Detector:
                 return True
         return False
     
-    def detectar_diagonal(self, lista_adn_usuario):
-        #comrpobar diagonal de izquierda a derecha y derecha a izquierda
-        #comprobar de izquierda a derecha
-        for i in range(3):
-            diagonal = ''.join(self.lista_adn_usuario[i + j][j] for j in range(6 - i))
-            if self.contar_repeticiones(diagonal) >= 4:
-                return True
-            else:
-                return False
+    def detectar_diagonal_izquierda(self, lista_adn_usuario):
+    
+    # Diagonales superiores (comenzando desde la primera columna)
+        for i in range(3):  # Recorrer primeras 3 filas
+            diagonal = ''.join(lista_adn_usuario[i + j][j] for j in range(6 - i))
             
-        #comprobar de derecha a izquiersa 
-        for i in range (1, 6):
-            diagonal = ''.join(self.lista_adn_usuario[j][i + j] for j in range (6 - i))
             if self.contar_repeticiones(diagonal) >= 4:
                 return True
-            else:
-                return False
+
+    
+
+        return False
+    
+    def detectar_diagonal_derecha(self, lista_adn_usuario):
+    
+    # Diagonales superiores (comenzando desde la última columna)
+        for i in range(3):  # Recorrer primeras 3 filas
+            diagonal = ''.join(lista_adn_usuario[j][5 - (i + j)] for j in range(6 - i))
+            
+            if self.contar_repeticiones(diagonal) >= 4:
+                return True
+
+    
+
+        return False
             
     def tipo_mutacion(self, mutaciones_detectadas):
         #identificar y mostrar los tipos
