@@ -60,7 +60,7 @@ while True:
                 radiacion.crear_mutante(lista_adn_usuario)
             elif mutacion == "B":
                 virus = clases.Virus()
-                virus.crear_virus(lista_adn_usuario)
+                virus.crear_mutante(lista_adn_usuario)
             else:
                 print("Opción incorrecta")
             

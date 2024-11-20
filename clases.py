@@ -22,7 +22,7 @@ class Virus(Mutador):
     def __init__(self, base_nitrogenada = None, nivel_mutacion=None, origen=None):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
-    def crear_virus(self, lista_adn_usuario):
+    def crear_mutante(self, lista_adn_usuario):
         
         while True:
 
