@@ -56,10 +56,11 @@ while True:
             # Preguntar al usuario qué tipo de mutación quiere hacer (radiación o virus)
             mutacion = input("""¿Quieres crear una radiación (A) o un virus (B)?
                             ---> """).upper()
-
+            
+            # Solicitar datos para la mutación de radiación
+            base_nitrogenada = input("Ingrese la base nitrogenada para la mutación (A, T, C, G): ").upper()
             if mutacion == "A":
-                # Solicitar datos para la mutación de radiación
-                base_nitrogenada = input("Ingrese la base nitrogenada para la mutación (A, T, C, G): ").upper()
+                
                 if base_nitrogenada not in ['A', 'T', 'C', 'G']:
                     print("Base nitrogenada no válida.")
                 else:
@@ -91,8 +92,8 @@ while True:
                     -------------------------------------------------    
                             ---> """).upper()
                 while True:
-                    base_nitrogenada = input("""¿Por cual base nitrogenada desea modificar? ['A', 'C', 'T', 'G']
-                                    ---> """).upper()
+                    #base_nitrogenada = input("""¿Por cual base nitrogenada desea modificar? ['A', 'C', 'T', 'G']
+                    #                ---> """).upper()
                     if base_nitrogenada in ["A", "C", "T", "G"]:
                         break
                     else:

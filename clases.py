@@ -208,12 +208,6 @@ class  Detector:
         else:
             print (f"Se detectaron las siguientes mutaciones: {', '.join(tipos_detectados)}.")      
             
-            
-#Por lo menos 2 atributos que consideren pertinentes.
-#Método constructor (init) con sus argumentos para definir los atributos al instanciar un objeto.
-#Método sanar_mutantes, encargado de sanar cualquier tipo de mutación. Éste debe tener como argumento la matriz de ADN, revisar si existen mutaciones 
-#y, si las hay, generar aleatoriamente un ADN completamente nuevo que no tenga mutaciones y retornarlo. Consejo: esta clase va a necesitar el 
-#método detectar_mutante, que ya lo han definido en otra clase!
 
 
 class Sanador:
@@ -296,5 +290,9 @@ class Sanador:
             
         
 
+class Comprobacion:
+    def __init__(self):
+        pass
     
-    
+    def comprobaciones(self):
+        pass
