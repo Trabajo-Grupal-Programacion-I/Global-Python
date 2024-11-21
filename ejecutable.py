@@ -1,7 +1,7 @@
 import clases
 
-print("""¡Bienvenido! Te voy a pedir que ingreses una secuencia de ADN con las inciales de las 4 bases nitrogrenadas, tiene que ser 6 secuecias de 6 iniciales 
-separando cada secuencia con una coma(,).""")
+print("""¡Bienvenido! Te voy a pedir que ingreses una secuencia de ADN con las inciales de las 4 bases nitrogrenadas, 
+    tiene que ser 6 secuecias de 6 iniciales separando cada secuencia con una coma(,).""")
 
 while True:
     # Bucle para solicitar el ADN hasta que se ingrese correctamente
