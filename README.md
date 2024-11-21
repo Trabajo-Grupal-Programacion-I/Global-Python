@@ -19,5 +19,5 @@ Integrantes:
 Lucas Norton
 German Marino
 Julian Santos
-Manuel Crespo
+Emmanuel Crespo
 Ignacio Navarria
