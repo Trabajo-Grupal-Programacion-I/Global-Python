@@ -36,4 +36,4 @@ Tambien podran generar una radiacion (mutaciones diagonales y verticales) eligie
 *German Marino* -
 *Julian Santos* -
 *Emmanuel Crespo* -
-*Ignacio Navarria* -
+*Ignacio Navarria* 
