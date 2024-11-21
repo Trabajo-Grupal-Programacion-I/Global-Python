@@ -19,7 +19,7 @@ class Virus(Mutador):
     def __init__(self, base_nitrogenada = None, nivel_mutacion=None, origen=None):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
-    def crear_mutante(self, lista_adn_usuario, base_nitrogenada, posicion_inicial, direccion):
+    def crear_mutante(self, lista_adn_usuario:list, base_nitrogenada:str, posicion_inicial:tuple, direccion:str):
         
         while True:
                     
@@ -94,7 +94,7 @@ class Radiacion(Mutador):
     def __init__(self, base_nitrogenada=None, nivel_mutacion=None, origen=None):
         super().__init__(base_nitrogenada, nivel_mutacion, origen)
 
-    def crear_mutante(self, lista_adn_usuario, posicion_inicial, orientacion_de_la_mutacion, base_nitrogenada):
+    def crear_mutante(self, lista_adn_usuario:list, posicion_inicial:tuple, orientacion_de_la_mutacion:str, base_nitrogenada:str):
         # Convertir las secuencias de ADN en una matriz de lista
         matriz = [list(elemento) for elemento in lista_adn_usuario]
         tamaño_matriz = len(matriz)
@@ -152,7 +152,7 @@ class Radiacion(Mutador):
 
 
 class  Detector: 
-    def __init__(self, lista_adn_usuario, contador_mutaciones=0):
+    def __init__(self, lista_adn_usuario:list, contador_mutaciones=0):
         self.lista_adn_usuario = [list(elemento) for elemento in lista_adn_usuario]
         self.contador_mutaciones = contador_mutaciones
 
@@ -168,7 +168,13 @@ class  Detector:
         print(f"Los distintos tipos de mutaciones encontradas son {self.contador_mutaciones}")
         #paso los resultados de las funciones
         self.tipo_mutacion(mutaciones_detectadas)
-
+        
+        if True in [self.detectar_horizontal(lista_adn_usuario),self.detectar_vertical(lista_adn_usuario),
+                    self.detectar_diagonal_izquierda(lista_adn_usuario),self.detectar_diagonal_derecha(lista_adn_usuario)]:
+            return True
+        else:
+            return False
+        
     def contar_repeticiones(self, lista_adn_usuario):
         #cuenta cuantas veces se repite una base nitrogenada
         max_repeticiones = 1
@@ -255,9 +261,10 @@ class Sanador:
         else: 
             print("El sanador ya esta en estado inactivo")
                     
-    def sanar_mutantes(self, lista_adn_usuario):  #Analizamos el ADN
+    def sanar_mutantes(self, lista_adn_usuario:list):  #Analizamos el ADN
         detector = Detector(lista_adn_usuario)
         comprobacion = detector.detectar_mutantes(lista_adn_usuario)
+        print(comprobacion)
         if (comprobacion == False):
             for fila in lista_adn_usuario:
                 print(' '.join(fila))  
@@ -266,38 +273,38 @@ class Sanador:
         else:
             self.cambiar_estado()  # Estado activo del sanador
 
-        while True:
-            # Generar un nuevo ADN aleatorio SIN mutaciones
-            letras = ["A", "C", "G", "T"]
-            nuevo_adn = []
-            valido = True 
+            while True:
+                # Generar un nuevo ADN aleatorio SIN mutaciones
+                letras = ["A", "C", "G", "T"]
+                nuevo_adn = []
+                valido = True 
 
-            for i in range(6):
-                fila = []
-                for j in range(6):
-                    letra = random.choice(letras)
-                    # Comprobaciones al insertar la letra
-                    if (
-                        j >= 3 and fila[j-1] == fila[j-2] == fila[j-3] == letra or  # Mutación horizontal
-                        i >= 3 and nuevo_adn[i-1][j] == nuevo_adn[i-2][j] == nuevo_adn[i-3][j] == letra or  # Mutación vertical
-                        i >= 3 and j >= 3 and nuevo_adn[i-1][j-1] == nuevo_adn[i-2][j-2] == nuevo_adn[i-3][j-3] == letra or  # Diagonal principal
-                        i >= 3 and j <= 2 and nuevo_adn[i-1][j+1] == nuevo_adn[i-2][j+2] == nuevo_adn[i-3][j+3] == letra  # Diagonal secundaria
-                    ):
-                        valido = False  
+                for i in range(6):
+                    fila = []
+                    for j in range(6):
+                        letra = random.choice(letras)
+                        # Comprobaciones al insertar la letra
+                        if (
+                            j >= 3 and fila[j-1] == fila[j-2] == fila[j-3] == letra or  # Mutación horizontal
+                            i >= 3 and nuevo_adn[i-1][j] == nuevo_adn[i-2][j] == nuevo_adn[i-3][j] == letra or  # Mutación vertical
+                            i >= 3 and j >= 3 and nuevo_adn[i-1][j-1] == nuevo_adn[i-2][j-2] == nuevo_adn[i-3][j-3] == letra or  # Diagonal principal
+                            i >= 3 and j <= 2 and nuevo_adn[i-1][j+1] == nuevo_adn[i-2][j+2] == nuevo_adn[i-3][j+3] == letra  # Diagonal secundaria
+                        ):
+                            valido = False  
+                            break
+                        fila.append(letra)
+
+                    if not valido:
                         break
-                    fila.append(letra)
 
-                if not valido:
+                    nuevo_adn.append(''.join(fila))
+
+                if valido:  # Si el ADN generado no tiene mutaciones, salimos del bucle
+                    lista_adn_usuario[:] = nuevo_adn
                     break
 
-                nuevo_adn.append(''.join(fila))
-
-            if valido:  # Si el ADN generado no tiene mutaciones, salimos del bucle
-                lista_adn_usuario[:] = nuevo_adn
-                break
-
-        print("ADN sano generado:")
-        for fila in lista_adn_usuario:
-            print(' '.join(fila))
-        self.cambio_energia()
-        self.sanador_inactivo()
+            print("ADN sano generado:")
+            for fila in lista_adn_usuario:
+                print(' '.join(fila))
+            self.cambio_energia()
+            self.sanador_inactivo()
