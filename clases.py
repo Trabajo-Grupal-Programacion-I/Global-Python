@@ -264,7 +264,7 @@ class Sanador:
     def sanar_mutantes(self, lista_adn_usuario:list):  #Analizamos el ADN
         detector = Detector(lista_adn_usuario)
         comprobacion = detector.detectar_mutantes(lista_adn_usuario)
-        print(comprobacion)
+        
         if (comprobacion == False):
             for fila in lista_adn_usuario:
                 print(' '.join(fila))  
