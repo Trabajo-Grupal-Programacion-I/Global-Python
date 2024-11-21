@@ -4,6 +4,7 @@
 Este programa analiza, detecta, y manipula secuencias de ADN representadas en una matriz de 6x6. Cada base nitrogenada del ADN está representada por las letras A, T, C, y G. El programa permite realizar las siguientes acciones:
 
 La secuencia de ADN debe ser ingresada en este orden: 6 letras de las iniciales de las bases nitrogenadas (A, C, G o T), seguido de una coma (,) y repetir el proceso hasta que quede formado el ADN. Ejemplo: AGATCA, GATTCA, CAACAT, GAGCTA, ATTGCG, CTGTTC.
+![ADN](https://imgur.com/BxIv7Dh)
 
 ***Detección de Mutaciones:*** Identifica si existen mutaciones en el ADN ingresado. Una mutación ocurre cuando una base nitrogenada se repite al menos 4 veces consecutivas en una misma fila, columna o diagonal (horizontal, vertical o diagonal).
 El programa te indicara con un mensaje cuantas y cuales mutaciones contiene tu secuencia de ADN.
@@ -16,8 +17,8 @@ Tmabien podran generar una radiacion (mutaciones diagonales y verticales) eligie
 ***Sanación de ADN:*** En caso de que el ADN contenga mutaciones, se genera un nuevo ADN aleatorio que cumple con las restricciones, asegurándose de que no existan mutaciones.
 
 <u>**Integrantes:**</u> 
-*Lucas Norton*
-*German Marino*
-*Julian Santos*
-*Emmanuel Crespo*
-*Ignacio Navarria*
+*Lucas Norton* -
+*German Marino* -
+*Julian Santos* -
+*Emmanuel Crespo* -
+*Ignacio Navarria* -
